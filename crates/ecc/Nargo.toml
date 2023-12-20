@@ -1,0 +1,9 @@
+[package]
+name = "bandersnatch"
+type = "lib"
+authors = ["Distributed Lab"]
+compiler_version = "0.19.4"
+description = "Bandesnatch ECC module for Verkle Tries"
+license = "MIT"
+
+[dependencies]
