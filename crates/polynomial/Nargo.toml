@@ -1,0 +1,10 @@
+[package]
+name = "polynomial"
+type = "lib"
+authors = ["Distributed Lab"]
+compiler_version = "0.22.0"
+description = "Polynomial module for Verkle Tries"
+license = "MIT"
+
+[dependencies]
+ecc = {path = "./../ecc"}
