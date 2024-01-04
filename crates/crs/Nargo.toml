@@ -1,9 +1,10 @@
 [package]
-name = "ecc"
+name = "crs"
 type = "lib"
 authors = ["Distributed Lab"]
 compiler_version = "0.22.0"
-description = "ECC module for Verkle Tries"
+description = "CRS module for Verkle Tries"
 license = "MIT"
 
 [dependencies]
+ecc = {path = "./../ecc"}
