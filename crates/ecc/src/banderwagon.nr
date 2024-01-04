@@ -17,7 +17,7 @@ struct Element {
 }
 
 impl Element {
-    // Element from big-endian bytes
+    // Element from big-endian bytes.
     pub fn new(bytes: [u8; COMPRESSED_SIZE]) -> Option<Self>{
         let x = bytes32_to_field(bytes);
 
@@ -32,7 +32,7 @@ impl Element {
         Option::some(Self{inner: point})
     }
 
-    // Check that 1 - ax^2 is a square using Legendre symbol
+    // Check that 1 - ax^2 is a square using Legendre symbol.
     fn subgroup_check(x: Field) -> bool{
         let value = 1 - bandersnatch().a * x * x;
         legendre(value) == 1
@@ -58,6 +58,23 @@ impl Element {
         x1 * y2 == y1 * x2
     }
     
+    // Uncompressed serialization.
+    pub fn serialize(self) -> [u8; COMPRESSED_SIZE]{
+        let point = self.inner.into_affine();        
+        let mut affineX = point.x;
+
+        affineX *= point.y.sgn0() as Field;
+        
+        let serialised = affineX.to_be_bytes(COMPRESSED_SIZE);
+        let mut result = [0; COMPRESSED_SIZE];
+
+        for i in 0..serialised.len(){
+            result[i] = serialised[i];
+        }
+        
+        result
+    }
+
     pub fn generator() -> Self{
         Self{inner: bandersnatch().gen}
     }
