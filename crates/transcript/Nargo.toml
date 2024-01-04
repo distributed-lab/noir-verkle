@@ -1,0 +1,10 @@
+[package]
+name = "transcript"
+type = "lib"
+authors = ["Distributed Lab"]
+compiler_version = "0.22.0"
+description = "Fiat-Shamir Transcript module for Verkle Tries"
+license = "MIT"
+
+[dependencies]
+ecc = {path = "./../ecc"}
