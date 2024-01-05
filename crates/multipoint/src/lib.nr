@@ -30,7 +30,7 @@ global LABEL_Y = "y";
 global LABEL_D = "D";
 global LABEL_T = "t";
 global LABEL_E = "E";
-//global LABEL_DOMAIN_SEP = "multiproof";
+global LABEL_DOMAIN_SEP_MULTIPROOF = "multiproof";
 
 struct ProverQuery {
     commitment: Element,
@@ -56,7 +56,7 @@ impl MultiProof{
         config: IPAConfig<N>,
         queries: [ProverQuery],
     ) -> Self{
-        transcript.domain_sep(LABEL_DOMAIN_SEP.as_bytes().as_slice());
+        transcript.domain_sep(LABEL_DOMAIN_SEP_MULTIPROOF.as_bytes().as_slice());
 
         for query in queries{
             transcript.append_point(query.commitment, LABEL_C.as_bytes().as_slice());
@@ -117,6 +117,55 @@ impl MultiProof{
         let proof = IPAProof::create(transcript, config, a.as_slice(), commitment, t);
 
         MultiProof{IPA: proof, D}
+    }
+
+    fn verify<N>(
+        self,
+        transcript: Transcript,
+        config: IPAConfig<N>,
+        queries: [VerifierQuery]
+    ) -> bool{
+        transcript.domain_sep(LABEL_DOMAIN_SEP_MULTIPROOF.as_bytes().as_slice());
+        
+        for query in queries{
+            transcript.append_point(query.commitment, LABEL_C.as_bytes().as_slice());
+            transcript.append_scalar(query.point, LABEL_Z.as_bytes().as_slice());
+            transcript.append_scalar(query.result, LABEL_Y.as_bytes().as_slice());
+        }
+        let r = transcript.challenge_scalar(LABEL_R.as_bytes().as_slice());
+
+        transcript.append_point(self.D, LABEL_D.as_bytes().as_slice());
+	    let t = transcript.challenge_scalar(LABEL_T.as_bytes().as_slice());
+
+        let mut grouped: [Field; N] = [0; N];
+        let mut r_pow = 1;
+
+        for i in 0..N{
+            grouped[queries[i].point] += queries[i].result * r_pow;
+            r_pow *= r;
+        }
+
+        let mut helper_scalars_den: [Field; N] = [0; N];
+        for i in 0..N{
+            helper_scalars_den[i] = 1 / (t - i);
+        }
+
+        let mut g_2_t = 0;
+        for i in 0..N{
+            if grouped[i] != 0{
+                g_2_t += grouped[i] * helper_scalars_den[i];
+            }
+        }
+
+        let mut r_pow = 1;
+        let scalars = helper_scalars_den.map(|s| {let res = s * r_pow; r_pow *= r; res}).as_slice();
+        let commitments = queries.map(|query: VerifierQuery| query.commitment);
+        let E = Element::msm(commitments, scalars);
+        transcript.append_point(E, LABEL_E.as_bytes().as_slice());
+
+        let commitment = E.sub(self.D);
+
+        self.IPA.verify(transcript, config, commitment, t, g_2_t)
     }
 
     // We want to group all of the polynomials which are evaluated at the same point together.
