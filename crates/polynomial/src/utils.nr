@@ -4,7 +4,7 @@ use dep::std::unsafe::zeroed;
 // premature allocation is available only for arrays with compile time lenght and 
 // we can't use a simple expressions with generics to overcome this in a variery of usecases 
 // (like N*2 for weights and inverted weights in barycentric).
-pub(crate) fn allocate_slice<T>(len: u64) -> [T] {
+pub fn allocate_slice<T>(len: u64) -> [T] {
     let mut res: [T] = [];
 
     for _ in 0..len {

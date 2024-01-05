@@ -3,19 +3,6 @@ mod utils;
 use dep::ecc::banderwagon::Element;
 use dep::std::collections::vec::Vec;
 
-struct LagrangeBasis{
-    domain: Field,
-    values: Vec<Field>
-}
-
-impl LagrangeBasis{
-    pub fn new(values: Vec<Field>) -> Self{
-        let domain = values.len();
-        Self{domain, values}
-    }
-    
-}
-
 struct PrecomputedWeights{
     // This stores A'(x_i) and 1/A'(x_i)
     barycentric_weights: [Field],
