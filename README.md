@@ -65,4 +65,4 @@ This library is split into six crates:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/NikitaMasych/noir-verkle/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/distributed-lab/noir-verkle/blob/main/LICENSE) file for details.
