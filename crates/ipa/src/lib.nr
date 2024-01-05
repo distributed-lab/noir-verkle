@@ -7,7 +7,7 @@ use dep::polynomial::utils::allocate_slice;
 use dep::crs::CRS;
 
 /*
-These defitions origin prior to modifications is from github.com/ethereum/go-ipa.
+These defitions origin prior to modifications is from github.com/crate-crypto/go-ipa.
 
 The following are labels to be used in Fiat-Shamir during the
 inner-product argument protocol.
