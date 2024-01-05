@@ -1,2 +1,2 @@
 [workspace]
-members = ["crates/ecc", "crates/polynomial", "crates/crs", "crates/transcript"]
+members = ["crates/ecc", "crates/polynomial", "crates/crs", "crates/transcript", "crates/ipa"]
