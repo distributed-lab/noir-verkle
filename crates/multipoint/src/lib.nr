@@ -169,7 +169,19 @@ impl MultiProof{
     }
 
     // We want to group all of the polynomials which are evaluated at the same point together.
-    fn group_prover_queries_by_point(queries: [ProverQuery], r: Field) -> [[Field]]{
-        [[]] // TODO: implement
+    fn group_prover_queries_by_point<N>(queries: [ProverQuery], r: Field) -> [[Field]; N]{
+        let mut result: [[Field]; N] = [[]; N];
+        let mut r_pow = 1;
+        for i in 0..queries.len(){
+            let z = queries[i].point;
+            if result[z].len() == 0{
+                result[z] = allocate_slice(N);
+            }
+            for j in 0..N{
+                result[z][j] += r_pow * queries[i].poly[j];
+            }
+            r_pow *= r;
+        }
+        result
     }
 }
