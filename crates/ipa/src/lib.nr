@@ -54,7 +54,7 @@ impl IPAProof{
     ) -> Self{
         transcript.domain_sep(LABEL_DOMAIN_SEP.as_bytes().as_slice());
         
-        let mut b = IPAProof::compute_vector_b(config, point);
+        let mut b = IPAProof::compute_vector_b(config, point).as_slice();
         let product = inner_product(a, b);
 
         transcript.append_point(commitment, LABEL_C.as_bytes().as_slice());
@@ -120,7 +120,7 @@ impl IPAProof{
         assert(self.L.len() == self.R.len());
         assert(self.L.len() as u64 == config.rounds);
 
-        let mut b = IPAProof::compute_vector_b(config, point);
+        let mut b = IPAProof::compute_vector_b(config, point).as_slice();
 
         transcript.append_point(commitment, LABEL_C.as_bytes().as_slice());
         transcript.append_scalar(point, LABEL_INPUT_POINT.as_bytes().as_slice());
@@ -163,12 +163,11 @@ impl IPAProof{
         got.eq(commitment)
     }
 
-    fn compute_vector_b<N>(config: IPAConfig<N>, point: Field) -> [Field]{
-        let domain_size = config.crs.G.len() as u64;
-        if point as u64 > domain_size - 1{
-            config.precomputed_weights.compute_barycentric_coefficients(domain_size, point)   
+    fn compute_vector_b<N>(config: IPAConfig<N>, point: Field) -> [Field; N]{
+        if point as u64 > N - 1{
+            config.precomputed_weights.compute_barycentric_coefficients(N, point)   
         }
-        let mut b = allocate_slice(domain_size);
+        let mut b: [Field; N] = [0; N];
         b[point] = 1;
         b        
     }
