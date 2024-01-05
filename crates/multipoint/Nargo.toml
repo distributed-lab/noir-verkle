@@ -1,0 +1,14 @@
+[package]
+name = "multipoint"
+type = "lib"
+authors = ["Distributed Lab"]
+compiler_version = "0.22.0"
+description = "IPA-Multipoint module for Verkle Tries"
+license = "MIT"
+
+[dependencies]
+ecc = {path = "./../ecc"}
+transcript = {path = "./../transcript"}
+crs = {path = "./../crs"}
+polynomial = {path = "./../polynomial"}
+ipa = {path = "./../ipa"}
