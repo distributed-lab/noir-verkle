@@ -6,9 +6,9 @@ use dep::std::unsafe::zeroed;
 // (like N*2 for weights and inverted weights in barycentric).
 pub(crate) fn allocate_slice<T>(len: u64) -> [T] {
     let mut res: [T] = [];
-
+    let value = zeroed();
     for _ in 0..len {
-        res = res.push_back(zeroed());
+        res = res.push_back(value);
     }
 
     res
