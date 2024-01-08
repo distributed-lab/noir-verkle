@@ -1,6 +1,7 @@
-use dep::ecc::banderwagon::{Element, COMPRESSED_SIZE};
 use dep::std::sha256::digest as sha256;
 use dep::std::field::bytes32_to_field;
+
+use crate::ecc::banderwagon::{Element, COMPRESSED_SIZE};
 
 // Fiat-Shamir transcript protocol
 struct Transcript{

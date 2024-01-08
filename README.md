@@ -20,23 +20,18 @@ Considering that `Verkle Tries` are made on top of `Banderwagon` subgroup of the
 
 ```toml
 [dependencies]
-crs = { tag = "main", git = "https://github.com/distributed-lab/noir-verkle", directory = "crates/crs"}
-ecc = { tag = "main", git = "https://github.com/distributed-lab/noir-verkle", directory = "crates/ecc"}
-ipa = { tag = "main", git = "https://github.com/distributed-lab/noir-verkle", directory = "crates/ipa"}
-multipoint = { tag = "main", git = "https://github.com/distributed-lab/noir-verkle", directory = "crates/multipoint"}
-polynomial = { tag = "main", git = "https://github.com/distributed-lab/noir-verkle", directory = "crates/polynomial"}
-transcript = { tag = "main", git = "https://github.com/distributed-lab/noir-verkle", directory = "crates/transcript"}
+ipa_multipoint = { tag = "main", git = "https://github.com/distributed-lab/noir-verkle", directory = "crates/ipa-multipoint"}
 ```
+
 ## Packages
 
-This library is split into six crates:
-* `crs` - Common Reference String
-* `ecc` - Bandersnatch and Banderwagon
-* `ipa` - Inner product argument
-* `multipoint` - Multipoint proofs
-* `polynomial` - Barycentric interpolation
-* `transcript` - Fiat-Shamir protocol
-
+IPA-multipoint package is split into six primary crates:
+* `crs` - Common Reference String.
+* `ecc` - Banderwagon prime order subgroup of the Bandersnatch.
+* `ipa` - Inner product argument.
+* `multipoint` - Multipoint proofs.
+* `polynomial` - Barycentric interpolation.
+* `transcript` - Fiat-Shamir protocol.
 
 ## Reference
 

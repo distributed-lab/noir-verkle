@@ -1,9 +1,0 @@
-[package]
-name = "ecc"
-type = "lib"
-authors = ["Distributed Lab"]
-compiler_version = "0.22.0"
-description = "ECC module for Verkle Tries"
-license = "MIT"
-
-[dependencies]

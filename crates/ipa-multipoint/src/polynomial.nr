@@ -1,7 +1,7 @@
-mod utils;
-
-use dep::ecc::banderwagon::Element;
 use dep::std::collections::vec::Vec;
+
+use crate::ecc::banderwagon::Element;
+use crate::utils::allocate_slice;
 
 struct PrecomputedWeights{
     // This stores A'(x_i) and 1/A'(x_i)
@@ -14,7 +14,7 @@ impl PrecomputedWeights{
     pub fn new(domain_size: u64) -> Self{
         let midpoint = domain_size;
 
-        let mut barycentric_weights = utils::allocate_slice(domain_size*2);
+        let mut barycentric_weights = allocate_slice(domain_size*2);
 
         for i in 0..domain_size{
             let weight = PrecomputedWeights::compute_barycentric_weight(domain_size, i as Field);
@@ -25,7 +25,7 @@ impl PrecomputedWeights{
 
         // We do not have 1/0, so the domain_size for these is one less
         let midpoint = domain_size - 1;
-        let mut inverted_domain = utils::allocate_slice((domain_size-1)*2);
+        let mut inverted_domain = allocate_slice((domain_size-1)*2);
 
         for i in 1..domain_size{
             let k = 1 / i as Field;
@@ -49,7 +49,7 @@ impl PrecomputedWeights{
     }
 
     pub fn compute_barycentric_coefficients(self, domain_size: u64, point: Field ) -> [Field]{
-        let mut result = utils::allocate_slice(domain_size);
+        let mut result = allocate_slice(domain_size);
         let mut total_product = 1;
 
         for i in 0..domain_size{
@@ -67,7 +67,7 @@ impl PrecomputedWeights{
     }
 
     pub fn divide_on_domain(self, domain_size: u64, index: u64, f: [Field]) -> [Field]{
-        let mut quotient = utils::allocate_slice(domain_size);
+        let mut quotient = allocate_slice(domain_size);
         let y = f[index];
 
         for i in 0..domain_size{

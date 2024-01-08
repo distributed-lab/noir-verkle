@@ -1,5 +1,3 @@
-use crate::utils::rem;
-
 // Computes Legendre symbol: result is one of {1, 0, -1}.
 pub(crate) fn legendre(a: Field) -> Field {
     // Base field of the BLS12_381:
@@ -7,7 +5,7 @@ pub(crate) fn legendre(a: Field) -> Field {
     let e = (p - 1) / 2;
 
     // TODO: change this
-    rem(a.pow_32(e) as u64, p as u64) as Field
+    (a.pow_32(e) as u64 % p as u64) as Field
 }
 
 mod affine {
@@ -56,7 +54,8 @@ mod affine {
 
 mod curvegroup {
     use dep::std::ec::tecurve::curvegroup::Curve;
-    use crate::bandersnatch::affine::bandersnatch as AffineBandersnatch;
+
+    use crate::ecc::bandersnatch::affine::bandersnatch as AffineBandersnatch;
 
     pub(crate) fn bandersnatch() -> Curve {
         AffineBandersnatch().into_group()

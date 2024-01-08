@@ -1,10 +1,9 @@
 [package]
-name = "transcript"
+name = "ipa_multipoint"
 type = "lib"
 authors = ["Distributed Lab"]
 compiler_version = "0.22.0"
-description = "Fiat-Shamir Transcript module for Verkle Tries"
+description = "Cryptography for Verkle Tries"
 license = "MIT"
 
 [dependencies]
-ecc = {path = "./../ecc"}

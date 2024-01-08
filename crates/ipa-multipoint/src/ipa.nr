@@ -1,10 +1,8 @@
-mod utils;
-
-use dep::ecc::banderwagon::Element;
-use dep::transcript::Transcript;
-use dep::polynomial::{PrecomputedWeights, inner_product};
-use dep::polynomial::utils::allocate_slice;
-use dep::crs::CRS;
+use crate::crs::CRS;
+use crate::ecc::banderwagon::Element;
+use crate::transcript::Transcript;
+use crate::polynomial::{PrecomputedWeights, inner_product};
+use crate::utils::{allocate_slice, halve};
 
 /*
 These defitions origin prior to modifications is from github.com/crate-crypto/go-ipa.
@@ -71,9 +69,9 @@ impl IPAProof{
         let mut G = config.crs.G.as_slice();
 
         for i in 0..config.rounds{
-            let (mut a_L, a_R) = utils::halve(a);
-            let (mut b_L, b_R) = utils::halve(b);
-            let (mut G_L, G_R) = utils::halve(G);
+            let (mut a_L, a_R) = halve(a);
+            let (mut b_L, b_R) = halve(b);
+            let (mut G_L, G_R) = halve(G);
 
             let z_L = inner_product(a_R, b_L);
             let z_R = inner_product(a_L, b_R);
@@ -96,7 +94,7 @@ impl IPAProof{
             for i in 0..a_L.len() {
                 a_L[i] = a_L[i] + x * a_R[i];
                 b_L[i] = b_L[i] + x_inv * b_R[i];
-                G_L[i] = G_L[i].add(G_R[i].mul(x_inv));
+                G_L[i] = G_L[i] + (G_R[i].mul(x_inv));
             }
 
             a = a_L;
@@ -128,7 +126,7 @@ impl IPAProof{
 
         let w = transcript.challenge_scalar(LABEL_W.as_bytes().as_slice());
         let Q = config.crs.Q.mul(w);
-        let mut commitment = commitment.add(Q.mul(result));
+        let mut commitment = commitment + Q.mul(result);
 
         let challenges = self.generate_challenges(transcript);
         
@@ -142,13 +140,13 @@ impl IPAProof{
 
         let mut G = config.crs.G.as_slice();
         for x in challenges {
-            let (mut G_L, G_R) = utils::halve(G);
-            let (mut b_L, b_R) = utils::halve(b);
+            let (mut G_L, G_R) = halve(G);
+            let (mut b_L, b_R) = halve(b);
 
             let x_inv = 1 / x;
             for i in 0..G_L.len() {
-                G_L[i] = G_L[i].add(G_R[i].mul(x_inv));
-                b_L[i] = b_L[i].add(b_R[i].mul(x_inv));
+                G_L[i] = G_L[i] + (G_R[i].mul(x_inv));
+                b_L[i] = b_L[i] + (b_R[i].mul(x_inv));
             }
             G = G_L;
             b = b_L;
@@ -157,10 +155,9 @@ impl IPAProof{
         assert(G.len() != 1);
         assert(b.len() != 1);
 
-        let (lhs, rhs) = (G[0].mul(self.a), Q.mul(self.a * b[0]));
-        let got = lhs.add(rhs);
+        let got = G[0].mul(self.a) +  Q.mul(self.a * b[0]);
 
-        got.eq(commitment)
+        got == commitment
     }
 
     fn compute_vector_b<N>(config: IPAConfig<N>, point: Field) -> [Field; N]{

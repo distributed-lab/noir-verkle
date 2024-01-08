@@ -1,8 +1,8 @@
-use dep::ecc::banderwagon::Element;
 use dep::std::collections::vec::Vec;
 use dep::std::sha256::digest as sha256;
 
-mod utils;
+use crate::ecc::banderwagon::Element;
+use crate::utils::u64_to_u8;
 
 struct CRS<N>{
     G: [Element; N],
@@ -30,13 +30,13 @@ impl<N> CRS<N>{
 }
 
 fn generate_random_points<N>(seed: [u8]) -> [Element; N] {
-    let mut points = [Element::zero(); N];
+    let mut points = [Element::default(); N];
     let mut counter = 0;
     let mut iterator = N;
 
     for i in 0..iterator {
         let mut input = seed;
-        let delta: [u8] = utils::u64_to_u8(i);
+        let delta: [u8] = u64_to_u8(i);
         input = seed.append(delta);
 
         let digest = sha256(input);

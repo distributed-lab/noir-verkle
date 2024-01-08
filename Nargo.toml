@@ -1,9 +1,4 @@
 [workspace]
 members = [
-    "crates/ecc", 
-    "crates/polynomial", 
-    "crates/crs", 
-    "crates/transcript", 
-    "crates/ipa", 
-    "crates/multipoint"
+    "crates/ipa-multipoint"
 ]

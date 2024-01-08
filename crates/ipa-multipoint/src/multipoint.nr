@@ -1,7 +1,7 @@
-use dep::ipa::{IPAProof, IPAConfig};
-use dep::ecc::banderwagon::Element;
-use dep::transcript::Transcript;
-use dep::polynomial::utils::allocate_slice;
+use crate::ipa::{IPAProof, IPAConfig};
+use crate::ecc::banderwagon::Element;
+use crate::transcript::Transcript;
+use crate::utils::allocate_slice;
 
 /*
 These defitions origin prior to modifications is from github.com/crate-crypto/go-ipa.
@@ -23,10 +23,10 @@ The following is a short description on how they're used in the protocol:
  7. Create the IPA proof for (E-D) at point `t`. See the `ipa` package for the FS description.
 */
 
-//global LABEL_C = "C";
+global LABEL_C = "C";
 global LABEL_Z = "z";
 global LABEL_Y = "y";
-//global LABEL_R = "r";
+global LABEL_R = "r";
 global LABEL_D = "D";
 global LABEL_T = "t";
 global LABEL_E = "E";
@@ -112,7 +112,7 @@ impl MultiProof{
         let E = Element::msm(config.crs.G, h_x);
         transcript.append_point(E, LABEL_E.as_bytes().as_slice());
 
-        let commitment = E.sub(D);
+        let commitment = E - D;
 
         let proof = IPAProof::create(transcript, config, a.as_slice(), commitment, t);
 
@@ -163,7 +163,7 @@ impl MultiProof{
         let E = Element::msm(commitments, scalars);
         transcript.append_point(E, LABEL_E.as_bytes().as_slice());
 
-        let commitment = E.sub(self.D);
+        let commitment = E - self.D;
 
         self.IPA.verify(transcript, config, commitment, t, g_2_t)
     }
