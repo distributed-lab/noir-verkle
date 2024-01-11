@@ -1,0 +1,10 @@
+[package]
+name = "trie"
+type = "lib"
+authors = ["Distributed Lab"]
+compiler_version = "0.22.0"
+description = "Verkle Tries Data Structure"
+license = "MIT"
+
+[dependencies]
+ipa_multipoint = {path = "./../ipa-multipoint"}
