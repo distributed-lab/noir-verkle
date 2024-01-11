@@ -1,13 +1,12 @@
-mod nodes;
 mod storage;
 mod committer;
 mod utils;
+mod models;
 
 use dep::ipa_multipoint::ecc::banderwagon::Element;
 use dep::ipa_multipoint::multipoint::MultiProof;
 use dep::std::option::Option;
 
-use crate::nodes::{InternalNode, LeafNode, ZeroNode};
 use crate::storage::{TrieStorageTrait, memory::Storage as MemStorage};
 use crate::committer::{TrieCommitterTrait, multipoint::Committer as MultipointCommitter};
 
@@ -20,6 +19,7 @@ global STEM_SIZE = 31;
 global LEAF_KEY_SIZE = 32;
 global LEAF_VALUE_SIZE = 32;
 
+type Stem = [u8; STEM_SIZE];
 type Key = [u8; LEAF_KEY_SIZE];
 type Value = [u8; LEAF_VALUE_SIZE];
 
